@@ -204,7 +204,7 @@
         //check firstVisibleObject
         firstVisibleObject=null;
         for(var k = 0; k < intersects.length; k++){
-            if( intersects[k].object.geometry == iconBox_small ){
+            if( intersects[k].object.material != colorInvis && intersects[k].object.geometry != basicGeometry ){
                 firstVisibleObject = intersects[k].object;
                 break;
             }
@@ -215,7 +215,10 @@
         if ( firstVisibleObject && selected != firstVisibleObject ) {
             if( selected && selected.situation == 3 ) selected.material = colorClickable;
             selected = firstVisibleObject;
-            if( selected.situation == 3) selected.material = color[iam+3];
+            if( selected.situation == 3 ){
+                if(iam==1)selected.material = TransBlue;
+                if(iam==2)selected.material = TransRed;
+            } 
         }
         else{
             if( selected && selected.situation == 3 )selected.material = colorClickable;
