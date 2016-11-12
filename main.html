@@ -199,29 +199,16 @@
 
         //set raycaster
         raycaster.setFromCamera( mouse, camera );
-        var intersects = raycaster.intersectObjects( scene.children );
-
-
-        if(intersects.length==0)firstVisibleObject=null;
-        else{
-            for(var k=0; k < intersects.length; k++){
-                if( intersects[k].object.material != colorInvis && intersects[k].object.geometry!= basicGeometry ){
-                    firstVisibleObject = intersects[k].object;
-                    break;
-                }
-                firstVisibleObject = null;
-            }
-        }
-
+        intersects = raycaster.intersectObjects( scene.children );
 
         //check firstVisibleObject
-        // firstVisibleObject=null;
-        // for(var k = 0; k < intersects.length; k++){
-        //     if( intersects[k].object.material != colorInvis && intersects[k].object.geometry != basicGeometry ){
-        //         firstVisibleObject = intersects[k].object;
-        //         break;
-        //     }
-        // }
+        firstVisibleObject=null;
+        for(var k = 0; k < intersects.length; k++){
+            if( intersects[k].object.geometry == iconBox_small ){
+                firstVisibleObject = intersects[k].object;
+                break;
+            }
+        }
 
         //player's actions  ///Note: could be edit
 
