@@ -100,7 +100,6 @@ var chk = function(id){
 	    	throw "k==4";
 	    }
 	    stat[i][j][k]=gameStat[l];
-
 	}
 
 	// stat part
@@ -148,6 +147,7 @@ var gameStart = function(){
     	console.log(playerList[0]["id"]);
 		io.to(playerList[0]["id"]).emit('youare',1);
 		io.to(playerList[1]["id"]).emit('youare',2);
+		console.log("sended youare");
 		player=1;
 		io.emit('downed',gameStat,player);
     	/*game start set.......*/
@@ -187,30 +187,28 @@ io.sockets.on('connection', function(socket){
             num = num.replace(/</g,"&lt;");
             num = num.replace(/>/g,"&gt;");
         }
-		if(playing){
-			if(id==playerList[player-1]["id"]){
-	            gameStat[num]=player;
-	            var winner=chk(num);
-	            if(winner){
-	                io.emit('gameOver',winner,playerList[winner-1]["name"],false)
-	                playing=false;
-	                console.log("there is a winner");
-	                for(var i=0;i<64;i++){
-	                	if(gameStat[i]==3)gameStat[i]=0;
-	                }
-	            	io.emit('downed',gameStat,3);
-	                waitingList.push(playerList[1]);
-        			waitingList.push(playerList[0]);
-	            	setTimeout(function(){
-	        			gameStart();
-	        		},10000);
-	            }
-	            else{
-		            if( num%4 != 3)gameStat[num+1]=3;
-		            player = player==1 ? 2 : 1;
-		            io.emit('downed',gameStat,player);	
-	            }
-        	}
+		if(playing && id==playerList[player-1]["id"]){
+            gameStat[num]=player;
+            var winner=chk(num);
+            if(winner){
+                io.emit('gameOver',winner,playerList[winner-1]["name"],false)
+                playing=false;
+                console.log("there is a winner");
+                for(var i=0;i<64;i++){
+                	if(gameStat[i]==3)gameStat[i]=0;
+                }
+            	io.emit('downed',gameStat,3);
+                waitingList.push(playerList[1]);
+    			waitingList.push(playerList[0]);
+            	setTimeout(function(){
+        			gameStart();
+        		},10000);
+            }
+            else{
+	            if( num%4 != 3 )gameStat[num+1]=3;
+	            player = player==1 ? 2 : 1;
+	            io.emit('downed',gameStat,player);	
+            }
 		}
 	})
 	socket.on('disconnect',function(){

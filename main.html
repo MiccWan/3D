@@ -89,7 +89,7 @@
 
 <script type="text/javascript"> // 3D Connect4 part
 
-    var socket = io('http://210.71.78.200:1999')
+    var socket = io('http://210.71.78.200:1999');
 
     // set up the renderer
     var scene = new THREE.Scene();
@@ -214,16 +214,16 @@
 
         if ( firstVisibleObject ){
             if( selected != firstVisibleObject ){
-                if( selected && selected.situation == 0 ) selected.material = colorClickable;
+                if( selected && selected.situation == 3 ) selected.material = colorClickable;
                 selected = firstVisibleObject;
-                if( selected.situation == 0 ){
+                if( selected.situation == 3 ){
                     if(iam==1)selected.material = TransBlue;
                     if(iam==2)selected.material = TransRed;
                 } 
             }
         }
         else{
-            if( selected && selected.situation == 0 )selected.material = colorClickable;
+            if( selected && selected.situation == 3 )selected.material = colorClickable;
             selected = null;
         }
 
@@ -261,6 +261,8 @@
     })
     socket.on('youare',function( youare ){
         iam = youare;
+        console.log("server says start");
+        consolo.log(iam);
         if(iam==1){
             alert("藍方先下，請下子");
             renderer.setClearColor( 0xbbbbdd );
