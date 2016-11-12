@@ -111,7 +111,7 @@
     var TransRed   = new THREE.MeshLambertMaterial( { color: 0xff0000, opacity: 0.6, transparent: true } );
     var colorGray  = new THREE.MeshLambertMaterial( { color: 0x222222  } );
     var color = [];
-    color = [ colorInvisible , colorBlue , colorRed , colorClickable ];
+    color = [ colorInvisible , colorBlue , colorRed , colorClickable , TransBlue , TransRed];
 
     // set up basic(called cube)
     var cube =  new THREE.Mesh( basicGeometry, colorGray );
@@ -203,15 +203,12 @@
         raycaster.setFromCamera( mouse, camera );
         intersects = raycaster.intersectObjects( scene.children );
 
-            //check firstVisibleObject
-        if( intersects.length == 0 )firstVisibleObject=null;
-        else{
-            for(var k = 0; k < intersects.length; k++){
-                if( intersects[k].object.material != colorInvisible && intersects[k].object.geometry != basicGeometry ){
-                    firstVisibleObject = intersects[k].object;
-                    break;
-                }
-                firstVisibleObject = null;
+        //check firstVisibleObject
+        firstVisibleObject=null;
+        for(var k = 0; k < intersects.length; k++){
+            if( intersects[k].object.material != colorInvisible && intersects[k].object.geometry != basicGeometry ){
+                firstVisibleObject = intersects[k].object;
+                break;
             }
         }
 
@@ -220,7 +217,7 @@
         if ( firstVisibleObject && selected != firstVisibleObject ) {
             if( selected && selected.situation == 3 ) selected.material = colorClickable;
             selected = firstVisibleObject;
-            if( selected.situation == 3) selected.material = color[iam];
+            if( selected.situation == 3) selected.material = color[iam+3];
         }
         else{
             if( selected && selected.situation == 3 )selected.material = colorClickable;
