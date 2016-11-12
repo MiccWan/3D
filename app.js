@@ -165,12 +165,12 @@ io.sockets.on('connection', function(socket){
 	if(playing)socket.emit('downed',gameStat,player);
 	if(playing==false)socket.emit('downed',gameStat,3);
 	socket.on('loginreq', function(name,join){
-        if(typeof(name)==string){
+        if(typeof(name)=='string'){
             name = name.replace(/&/g,"&amp;");
             name = name.replace(/</g,"&lt;");
             name = name.replace(/>/g,"&gt;");
         }
-        if(typeof(join)==string){
+        if(typeof(join)=='string'){
             join = join.replace(/&/g,"&amp;");
             join = join.replace(/</g,"&lt;");
             join = join.replace(/>/g,"&gt;");
@@ -182,7 +182,7 @@ io.sockets.on('connection', function(socket){
 		gameStart();
 	})
 	socket.on('down',function(num){
-        if(typeof(num)==string){
+        if(typeof(num)=='string'){
             num = num.replace(/&/g,"&amp;");
             num = num.replace(/</g,"&lt;");
             num = num.replace(/>/g,"&gt;");
@@ -263,12 +263,12 @@ io.sockets.on('connection', function(socket){
     },1000)
 
     socket.on('sendchat', function(text,name){
-        if(typeof(text)==string){
+        if(typeof(text)=='string'){
             text = text.replace(/&/g,"&amp;");
             text = text.replace(/</g,"&lt;");
             text = text.replace(/>/g,"&gt;");
         }
-        if(typeof(name)==string){
+        if(typeof(name)=='string'){
             name = name.replace(/&/g,"&amp;");
             name = name.replace(/</g,"&lt;");
             name = name.replace(/>/g,"&gt;");
@@ -282,4 +282,4 @@ io.sockets.on('connection', function(socket){
     })
 })
 
-server.listen(3334);
+server.listen(1999);
