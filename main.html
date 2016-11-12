@@ -212,13 +212,15 @@
 
         //player's actions  ///Note: could be edit
 
-        if ( firstVisibleObject && selected != firstVisibleObject ) {
-            if( selected && selected.situation == 3 ) selected.material = colorClickable;
-            selected = firstVisibleObject;
-            if( selected.situation == 3 ){
-                if(iam==1)selected.material = TransBlue;
-                if(iam==2)selected.material = TransRed;
-            } 
+        if ( firstVisibleObject ){
+            if( selected != firstVisibleObject ){
+                if( selected && selected.situation == 3 ) selected.material = colorClickable;
+                selected = firstVisibleObject;
+                if( selected.situation == 3 ){
+                    if(iam==1)selected.material = TransBlue;
+                    if(iam==2)selected.material = TransRed;
+                } 
+            }
         }
         else{
             if( selected && selected.situation == 3 )selected.material = colorClickable;
