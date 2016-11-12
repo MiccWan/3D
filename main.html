@@ -103,14 +103,15 @@
     var basicGeometry = new THREE.BoxGeometry( 5, 0.1, 5  );
     var iconBox_small = new THREE.BoxGeometry( 0.5,0.5,0.5 );  
     var iconBox_big = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
-    var colorInvisible = new THREE.MeshLambertMaterial( {  visible:false } );
+    var colorInvisible = new THREE.MeshLambertMaterial( {  color:0x000000 } );
     var colorClickable = new THREE.MeshLambertMaterial( { color: 0x555555, opacity: 0.3, transparent: true } );
     var colorBlue  = new THREE.MeshLambertMaterial( { color: 0x0000ff  } );
     var TransBlue  = new THREE.MeshLambertMaterial( { color: 0x0000ff, opacity: 0.6, transparent: true } );
     var colorRed   = new THREE.MeshLambertMaterial( { color: 0xff0000  } );
     var TransRed   = new THREE.MeshLambertMaterial( { color: 0xff0000, opacity: 0.6, transparent: true } );
     var colorGray  = new THREE.MeshLambertMaterial( { color: 0x222222  } );
-    var color = [ colorInvisible , colorBlue , colorRed , colorClickable ];
+    var color = [];
+    color = [ colorInvisible , colorBlue , colorRed , colorClickable ];
 
     // set up basic(called cube)
     var cube =  new THREE.Mesh( basicGeometry, colorGray );
@@ -335,7 +336,7 @@
     function renderRefresh(gameStat){
         for(var i=0;i<64;i++){
             cubes[i].material = color[gameStat[i]]
-            cubes[i].situation=gameStat[i];
+            cubes[i].situation = gameStat[i];
         }
     }
 </script>
