@@ -103,14 +103,14 @@
     var basicGeometry = new THREE.BoxGeometry( 5, 0.1, 5  );
     var iconBox_small = new THREE.BoxGeometry( 0.5,0.5,0.5 );  
     var iconBox_big = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
-    var colorInvisible = new THREE.MeshLambertMaterial( {  opacity: 0, transparent: true } );
+    var colorInvis = new THREE.MeshLambertMaterial( {  opacity: 0, transparent: true } );
     var colorClickable = new THREE.MeshLambertMaterial( { color: 0x555555, opacity: 0.3, transparent: true } );
     var colorBlue  = new THREE.MeshLambertMaterial( { color: 0x0000ff  } );
     var TransBlue  = new THREE.MeshLambertMaterial( { color: 0x0000ff, opacity: 0.6, transparent: true } );
     var colorRed   = new THREE.MeshLambertMaterial( { color: 0xff0000  } );
     var TransRed   = new THREE.MeshLambertMaterial( { color: 0xff0000, opacity: 0.6, transparent: true } );
     var colorGray  = new THREE.MeshLambertMaterial( { color: 0x222222  } );
-    var color = [ colorInvisible , colorBlue , colorRed , colorClickable , TransBlue , TransRed ];
+    var color = [ colorInvis , colorBlue , colorRed , colorClickable , TransBlue , TransRed ];
 
     // set up basic(called cube)
     var cube =  new THREE.Mesh( basicGeometry, colorGray );
@@ -139,7 +139,7 @@
     // set up cubes
     var cubes = [];
     for(var k=0; k<64; k++){
-        cubes[k] = new THREE.Mesh( iconBox_small, colorInvisible );
+        cubes[k] = new THREE.Mesh( iconBox_small, colorInvis );
         scene.add(cubes[k]);
         cubes[k].situation = 0;
         cubes[k].Num = k;
@@ -185,7 +185,6 @@
 
         renderer.setSize( window.innerWidth,window.innerHeight);
         requestAnimationFrame(render);
-
         // limiting latitude from 0 to 85
         latitude = Math.max(-85, Math.min(0, latitude));
 
@@ -205,7 +204,7 @@
         //check firstVisibleObject
         firstVisibleObject=null;
         for(var k = 0; k < intersects.length; k++){
-            if( intersects[k].object.material != colorInvisible && intersects[k].object.geometry != basicGeometry ){
+            if( intersects[k].object.material != colorInvis && intersects[k].object.geometry != basicGeometry ){
                 firstVisibleObject = intersects[k].object;
                 break;
             }
