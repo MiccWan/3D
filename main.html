@@ -85,11 +85,6 @@
     },false)
     document.body.appendChild(inputarea);
 
-</script>
-
-<script type="text/javascript"> // 3D Connect4 part
-
-    var socket = io('http://210.71.78.200:1999');
 
     // set up the renderer
     var scene = new THREE.Scene();
@@ -262,7 +257,7 @@
     socket.on('youare',function( youare ){
         iam = youare;
         console.log("server says start");
-        consolo.log(iam);
+        console.log(iam);
         if(iam==1){
             alert("藍方先下，請下子");
             renderer.setClearColor( 0xbbbbdd );
@@ -276,6 +271,9 @@
         renderRefresh(gameStat);
         turn = k;
     })
+    socket.on('jizzz',function( word ){
+        alert(word);
+    });
     socket.on('gameOver',function(winner,winName,leave){
             p1Icon1.material = color[winner];
             p1Icon2.material = color[winner];

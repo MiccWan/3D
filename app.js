@@ -137,17 +137,18 @@ var gameStart = function(){
 	readyToStart=false;
 	if(waitingList.length>1) readyToStart=true;
 	if(readyToStart && playing == false){
-        console.log(waitingList);
+        console.log("Here is waiting list : "+waitingList);
     	playerList = [];
         playerList[0] = waitingList.shift(1);
 	    playerList[1] = waitingList.shift(1);
     	playing=true;
     	format();
     	io.emit('restart')
-    	console.log(playerList[0]["id"]);
+    	console.log("Player 1 is : "+playerList[0]["id"]);
 		io.to(playerList[0]["id"]).emit('youare',1);
+        io.to(playerList[0]["id"]).emit('jizzz',"fuck you");
 		io.to(playerList[1]["id"]).emit('youare',2);
-		console.log("sended youare");
+		console.log("sended youare to "+playerList[0]["id"]);
 		player=1;
 		io.emit('downed',gameStat,player);
     	/*game start set.......*/
