@@ -30,8 +30,8 @@ app.get('/3DConnect4.html', function(req,res){
 	})
 })
 
-app.get('/chatroom.html',function(req,res){
-  res.sendFile(__dirname+'/chatroom.html',function(){
+app.get('/SDVX.html',function(req,res){
+  res.sendFile(__dirname+'/SDVX.html',function(){
     res.end();
   })
 })
