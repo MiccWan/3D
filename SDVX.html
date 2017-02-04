@@ -1,0 +1,224 @@
+<html>
+<head>
+	<title> SDVX -10 </title>
+	<script src="http://threejs.org/build/three.min.js"></script>
+</head>
+<body>
+<script>
+	//set Introduction
+	var score=0;
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	var info = document.createElement( 'div' );
+	info.style.position = 'absolute';
+	info.style.color = 'white';
+	info.style.top = '20px';
+	info.style.width = '100%';
+	info.style.textAlign = 'left';
+	info.innerHTML = 'Score : 0';
+	container.appendChild( info );
+
+	//rendering setup
+	var scene = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 1000 );
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	//lights
+	var directionalLight = new THREE.DirectionalLight( 0xcccccc );
+	directionalLight.position.set( 100,200,300 ).normalize();
+	scene.add( directionalLight );
+	var ambientLight = new THREE.AmbientLight( 0xffffff ,0.5 );
+	scene.add( ambientLight );
+
+	//colors
+	var colors = [0xDE017E,0x390E8E,0x0F0B27,0x1F2459,0xB8C04D];
+
+	//decorations
+	var decGeo=[],decMat=[],decBox=[],decX,decY,lim=4;
+	for(var i=0;i<50;){
+		decGeo[i] = new THREE.BoxGeometry(0.3, 0.3, 300);
+		decMat[i] = new THREE.MeshLambertMaterial({color:colors[abs(Math.random()*5)]});
+		decBox[i] = new THREE.Mesh( decGeo[i], decMat[i] );
+		decX=Math.random()*20-10;
+		decY=Math.random()*20-10;
+		if( !( decX>-lim && decX<lim && decY>-lim && decY<lim ) ){
+			scene.add( decBox[i] );
+			decBox[i].position.x=decX;
+			decBox[i].position.y=decY;
+			i++;	
+		}
+		
+	}
+
+	//platform
+	var plaGeo = new THREE.BoxGeometry(4, 0.3, 1000);
+	var plaMat = new THREE.MeshLambertMaterial( { color: colors[3] } );
+	var platform = new THREE.Mesh( plaGeo, plaMat );
+	scene.add( platform );
+
+	//beating line
+	var beaLineGeo = new THREE.BoxGeometry(1,0.45,2);
+	var beaLineMat = new THREE.MeshLambertMaterial({ color: colors[0] });
+	var beaLineMat2 = new THREE.MeshLambertMaterial({ color: 0xE7FFB1 });
+	var beaLine = [
+		new THREE.Mesh( beaLineGeo, beaLineMat ),
+		new THREE.Mesh( beaLineGeo, beaLineMat ),
+		new THREE.Mesh( beaLineGeo, beaLineMat ),
+		new THREE.Mesh( beaLineGeo, beaLineMat )
+	]
+	scene.add(beaLine[0]);
+	scene.add(beaLine[1]);
+	scene.add(beaLine[2]);
+	scene.add(beaLine[3]);
+	beaLine[0].position.x=-1.5;
+	beaLine[1].position.x=-0.5;
+	beaLine[2].position.x=0.5;
+	beaLine[3].position.x=1.5;
+
+
+
+	//Separation line
+	var sepBoxGeo = new THREE.BoxGeometry( 0.1, 0.6, 1000 );
+	var sepBoxMat = new THREE.MeshLambertMaterial({ color:0x920F59 });
+	var sepBox = [
+		new THREE.Mesh( sepBoxGeo, sepBoxMat ),
+		new THREE.Mesh( sepBoxGeo, sepBoxMat ),
+		new THREE.Mesh( sepBoxGeo, sepBoxMat )
+	]
+	scene.add(sepBox[0]);
+	scene.add(sepBox[1]);
+	scene.add(sepBox[2]);
+	sepBox[0].position.x=1;
+	sepBox[1].position.x=0;
+	sepBox[1].position.x=-1;
+
+	//beats
+	var beats=[],ranPos,ranNum,beat;
+	var beaGeo = new THREE.BoxGeometry( 0.85, 0.6,0.4 );
+	var beaMat = new THREE.MeshLambertMaterial({ color: colors[4] });
+	var spawnCube = setInterval(function(){
+		ranNum = Math.random()*4;
+		if(ranNum<1)ranPos=-1.5;
+		else if(ranNum<2)ranPos=-0.5;
+		else if(ranNum<3)ranPos=0.5
+		else ranPos=1.5;
+		beats.push( new THREE.Mesh( beaGeo, beaMat ) );
+		scene.add(beats[beats.length-1]);
+		beats[beats.length-1].position.x=ranPos;
+		beats[beats.length-1].position.z=-100;
+	}, 300);
+
+	//camera rotation parameters
+	var manualControl = false,longitude = -90,latitude = -20;
+	var savedX,savedY;
+	var savedLongitude,savedLatitude;
+	var mouse = new THREE.Vector2();
+	camera.target = new THREE.Vector3(0, 0, 0);
+
+	function render(){
+		animation=requestAnimationFrame( render );
+
+		//camera rotation
+		latitude = Math.max(-85, Math.min(87, latitude));
+		camera.target.x = 500 * Math.sin(THREE.Math.degToRad(90 - latitude)) * Math.cos(THREE.
+		Math.degToRad(longitude));
+		camera.target.y = 500 * Math.cos(THREE.Math.degToRad(90 - latitude));
+		camera.target.z = 500 * Math.sin(THREE.Math.degToRad(90 - latitude)) * Math.sin(THREE.
+		Math.degToRad(longitude));
+		camera.lookAt(camera.target);
+		camera.position.x = -camera.target.x/60;
+		camera.position.y = -camera.target.y/60;
+		camera.position.z = -camera.target.z/60;
+
+		//move beats
+		for(var i=0,j=0;i<beats.length;){
+			if(beats[i].position.z>3){
+				removeObjByParam(beats[i],false);
+				beats.shift();
+			}
+			else{
+				beats[i].position.z+=0.5;
+				i++;
+			}
+		}
+
+		renderer.render( scene, camera );
+	}
+	render();
+
+
+
+	//eventlistener
+	document.addEventListener("mousedown", onDocumentMouseDown, false);
+	document.addEventListener("mousemove", onDocumentMouseMove, false);
+	document.addEventListener("mouseup", onDocumentMouseUp, false);
+	document.addEventListener('keydown', onDocumentKeyDown,false);
+
+
+	//funcitons
+	function checkLine(line){
+		for(var i=0;i<beats.length;i++){
+			if(beats[i].position.x==line&&beats[i].position.z<1.2&&beats[i].position.z>-1.2){
+				console.log("hit");
+				removeObjByParam(beats[i],true);
+				beats.shift();
+			}
+		}
+	}
+	function removeObjByParam(obj,hit){
+		for( var i = 0; i<scene.children.length; i++) {
+		    if( scene.children[i] == obj ){
+				scene.remove(obj);
+				if(hit)score+=200;
+				else score-=100;
+				info.innerHTML = 'Score : '+score;
+				return;
+		    } 
+		}
+	}
+	function onDocumentMouseDown(event){
+		event.preventDefault();
+		manualControl = true;
+		savedY = event.clientY;
+		savedLatitude = latitude;
+	}
+	function onDocumentMouseMove(event){
+		event.preventDefault();
+		if(manualControl){
+			latitude = -(event.clientY - savedY) * 0.1 + savedLatitude;
+		};
+		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	}
+	function onDocumentMouseUp(event){
+		manualControl = false;
+	}
+	function onDocumentKeyDown(event){
+		console.log("jizz");
+		var x=0;
+        if((event.keyCode || event.which)==65)x=0;
+        if((event.keyCode || event.which)==83)x=1;
+        if((event.keyCode || event.which)==75)x=2;
+        if((event.keyCode || event.which)==76)x=3;
+        if((event.keyCode || event.which)==80)stop();
+        checkLine(x-1.5);
+        beaLine[x].material=beaLineMat2;
+        setTimeout(function(){beaLine[x].material=beaLineMat},100);
+    }
+    var pause=false;
+    function stop(){
+    	if(pause){
+    		requestAnimationFrame( render );
+    		pause = false;
+    	}
+    	else {
+    		cancelAnimationFrame( animation );
+    		pause = true;
+    	}
+    }
+    function abs(num){
+    	return num-num%1;
+    }
+</script>
+</body>
