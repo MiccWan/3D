@@ -15,6 +15,7 @@ var http =  require('http');
 var now;
 
 app.use('/static', express.static(__dirname+'/static'));
+app.use('/static', express.static(__dirname+'/public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -35,6 +36,13 @@ app.get('/timer', function(req,res){
 app.get('/timer2', function(req,res){
 	console.log("get request to '/timer2'")
 	res.sendFile(__dirname+'/timer2.html', function(){
+		res.end();
+	})
+})
+
+app.get('/timer_compare', function(req,res){
+	console.log("get request to '/timer_compare'")
+	res.sendFile(__dirname+'/timer_compare.html', function(){
 		res.end();
 	})
 })

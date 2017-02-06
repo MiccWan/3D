@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>worker test</title>
+    </head>
+    <body>
+        <script src="http://cdn.rawgit.com/h2non/thread.js/0.1.16/thread.js"></script>
+        <script>
+            var times = 0;
+            var workers = [
+                thread(),
+                thread()
+            ];
+            for(var i=0;i<2;i++) {
+                workers[i].on('message', function() {
+                    times++;
+                });
+                workers[i].run(function() {
+                    while(true) {
+                        var a = 0;
+                        while(a<=1000000) {
+                            a++;
+                            a++,a--;
+                        }
+                        self.postMessage('done');
+                    }
+                });
+            }
+            setInterval(function() {
+                console.log(times);
+            }, 1000);
+        </script>
+    </body>
+</html>
