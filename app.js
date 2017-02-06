@@ -15,7 +15,7 @@ var http =  require('http');
 var now;
 
 app.use('/static', express.static(__dirname+'/static'));
-app.use('/static', express.static(__dirname+'/public'));
+app.use('/', express.static(__dirname+'/public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
