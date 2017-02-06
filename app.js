@@ -19,18 +19,28 @@ app.use('/static', express.static(__dirname+'/static'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', function(req,res){
+	console.log("get request to '/'")
 	res.sendFile(__dirname+'/main.html', function(){
 		res.end();
 	})
 })
 
-app.get('/3DConnect4.html', function(req,res){
-	res.sendFile(__dirname+'/3DConnect4.html',function(){
+app.get('/timer', function(req,res){
+	console.log("get request to '/timer'")
+	res.sendFile(__dirname+'/timer.html', function(){
 		res.end();
 	})
 })
 
-app.get('/SDVX.html',function(req,res){
+app.get('/timer2', function(req,res){
+	console.log("get request to '/timer2'")
+	res.sendFile(__dirname+'/timer2.html', function(){
+		res.end();
+	})
+})
+
+app.get('/SDVX',function(req,res){
+	console.log("get request to '/SDVX'")
   res.sendFile(__dirname+'/SDVX.html',function(){
     res.end();
   })
@@ -281,4 +291,4 @@ io.sockets.on('connection', function(socket){
     })
 })
 
-server.listen(1999);
+server.listen(9002);
