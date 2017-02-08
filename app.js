@@ -1,8 +1,6 @@
 'use strict'
 
 var path = require('path');
-// var mongodb = require('mongodb');
-// var MongoClient = mongodb.MongoClient;
 var bodyParser = require('body-parser');
 
 var express = require('express')
