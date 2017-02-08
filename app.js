@@ -2,19 +2,20 @@
 
 var path = require('path');
 var bodyParser = require('body-parser');
-var port = 9002;
 
 var express = require('express')
-var app = express();
-var server = app.listen(port,function(){
-	console.log("Server is running at port "+port);
-});
-var io = require('socket.io').listen(server);
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+var http = require('http');
+var port = 9002;
+
+
 
 var now;
 
 app.use('/static', express.static(__dirname+'/static'));
-app.use('/', express.static(__dirname+'/public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -297,3 +298,7 @@ io.sockets.on('connection', function(socket){
         
     })
 })
+
+server.listen(port,function(){
+	console.log("Server is running at port "+port);
+});
