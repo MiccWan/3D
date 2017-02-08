@@ -2,13 +2,14 @@
 
 var path = require('path');
 var bodyParser = require('body-parser');
+var port = 9002;
 
 var express = require('express')
 var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
-var http =  require('http');
+var server = app.listen(port,function(){
+	console.log("Server is running at port "+port);
+});
+var io = require('socket.io').listen(server);
 
 var now;
 
@@ -296,5 +297,3 @@ io.sockets.on('connection', function(socket){
         
     })
 })
-
-server.listen(9002);
