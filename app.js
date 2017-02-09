@@ -163,16 +163,16 @@ var gameStart = function(){
 	readyToStart=false;
 	if(waitingList.length>1) readyToStart=true;
 	if(readyToStart && playing == false){
-        console.log("[Bingo] ".green+"Here is waiting list : "+waitingList);
+        console.log(colors.title("[Bingo] ")+"Here is waiting list : "+waitingList);
     	playerList = [];
         playerList[0] = waitingList.shift(1);
 	    playerList[1] = waitingList.shift(1);
     	playing=true;
     	format();
     	io.emit('restart')
-        console.log("[Bingo] ".green+"Game start!")
-     	console.log("[Bingo] ".green+"Player 1 is : "+playerList[0]["id"]);
-        console.log("[Bingo] ".green+"Player 2 is : "+playerList[1]["id"]);
+        console.log(colors.title("[Bingo] ")+"Game start!")
+     	console.log(colors.title("[Bingo] ")+"Player 1 is : "+playerList[0]["id"]);
+        console.log(colors.title("[Bingo] ")+"Player 2 is : "+playerList[1]["id"]);
 		io.to(playerList[0]["id"]).emit('youare',1);
 		io.to(playerList[1]["id"]).emit('youare',2);
 		//console.log("sended youare to "+playerList[0]["id"]);
@@ -188,7 +188,7 @@ gameStart();
 io.sockets.on('connection', function(socket){
 	var id = socket.id;
 	var name;
-	console.log("[Bingo] ".green+"Somebody joined")
+	console.log(colors.title("[Bingo] ")+colors.info("Someone joined"));
 	socket.emit('loginHint',playing);
 	if(playing)socket.emit('downed',gameStat,player);
 	if(playing==false)socket.emit('downed',gameStat,3);
@@ -221,7 +221,7 @@ io.sockets.on('connection', function(socket){
             if(winner){
                 io.emit('gameOver',winner,playerList[winner-1]["name"],false)
                 playing=false;
-                console.log("[Bingo] ".green+"Game over.");
+                console.log(colors.title("[Bingo] ")+colors.info("Game over."));
                 for(var i=0;i<64;i++){
                 	if(gameStat[i]==3)gameStat[i]=0;
                 }
@@ -240,7 +240,7 @@ io.sockets.on('connection', function(socket){
 		}
 	})
 	socket.on('disconnect',function(){
-		console.log("[Bingo] ".green+"Someone has discennected");
+		console.log(colors.title("[Bingo] ")+colors.info("Someone has discennected"));
 		for(var i=0;i<onlineList.length;i++){
 			if(onlineList[i]["id"]==id){
 				onlineList.splice(i,1);
@@ -296,7 +296,7 @@ io.sockets.on('connection', function(socket){
             name = name.replace(/</g,"&lt;");
             name = name.replace(/>/g,"&gt;");
         }
-        console.log(colors.title("[Bingo] ")+colors.infor(name+" says "+text+" "+now));
+        console.log(colors.title("[Bingo] ")+colors.info(name+" says "+text+" "+now));
         io.emit("pubchat", text, name ,now);
     });
 
@@ -306,5 +306,5 @@ io.sockets.on('connection', function(socket){
 });
 
 server.listen(port,function(){
-	console.log(colors.setup("Server is running at port "+port));
+	console.log(colors.setup("Server is running at port",port));
 });
