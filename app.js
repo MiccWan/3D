@@ -7,6 +7,7 @@ var express = require('express')
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var colors = require('colors');
 
 var http = require('http');
 var port = 9002;
@@ -20,35 +21,35 @@ app.use('/static', express.static(__dirname+'/static'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', function(req,res){
-	console.log("get request to '/'")
+	console.log("[System]get request to '/'")
 	res.sendFile(__dirname+'/main.html', function(){
 		res.end();
 	})
 })
 
 app.get('/timer', function(req,res){
-	console.log("get request to '/timer'")
+	console.log("[System] Get request to '/timer'")
 	res.sendFile(__dirname+'/timer.html', function(){
 		res.end();
 	})
 })
 
 app.get('/timer2', function(req,res){
-	console.log("get request to '/timer2'")
+	console.log("[System] Get request to '/timer2'")
 	res.sendFile(__dirname+'/timer2.html', function(){
 		res.end();
 	})
 })
 
 app.get('/timer_compare', function(req,res){
-	console.log("get request to '/timer_compare'")
+	console.log("[System] Get request to '/timer_compare'")
 	res.sendFile(__dirname+'/timer_compare.html', function(){
 		res.end();
 	})
 })
 
 app.get('/SDVX',function(req,res){
-	console.log("get request to '/SDVX'")
+	console.log("[System] Get request to '/SDVX'")
   res.sendFile(__dirname+'/SDVX.html',function(){
     res.end();
   })
@@ -155,18 +156,19 @@ var gameStart = function(){
 	readyToStart=false;
 	if(waitingList.length>1) readyToStart=true;
 	if(readyToStart && playing == false){
-        console.log("Here is waiting list : "+waitingList);
+        console.log("[Bingo]".green+"Here is waiting list : "+waitingList);
     	playerList = [];
         playerList[0] = waitingList.shift(1);
 	    playerList[1] = waitingList.shift(1);
     	playing=true;
     	format();
     	io.emit('restart')
-    	console.log("Player 1 is : "+playerList[0]["id"]);
+        console.log("[Bingo] Game start!")
+     	console.log("[Bingo] Player 1 is : "+playerList[0]["id"]);
+        console.log("[Bingo] Player 2 is : "+playerList[1]["id"]);
 		io.to(playerList[0]["id"]).emit('youare',1);
-        io.to(playerList[0]["id"]).emit('jizzz',"fuck you");
 		io.to(playerList[1]["id"]).emit('youare',2);
-		console.log("sended youare to "+playerList[0]["id"]);
+		//console.log("sended youare to "+playerList[0]["id"]);
 		player=1;
 		io.emit('downed',gameStat,player);
     	/*game start set.......*/
@@ -179,7 +181,7 @@ gameStart();
 io.sockets.on('connection', function(socket){
 	var id = socket.id;
 	var name;
-	console.log("somebody in")
+	console.log("[Bingo] Somebody joined")
 	socket.emit('loginHint',playing);
 	if(playing)socket.emit('downed',gameStat,player);
 	if(playing==false)socket.emit('downed',gameStat,3);
@@ -212,7 +214,7 @@ io.sockets.on('connection', function(socket){
             if(winner){
                 io.emit('gameOver',winner,playerList[winner-1]["name"],false)
                 playing=false;
-                console.log("there is a winner");
+                console.log("[Bingo] Game over.");
                 for(var i=0;i<64;i++){
                 	if(gameStat[i]==3)gameStat[i]=0;
                 }
@@ -231,17 +233,15 @@ io.sockets.on('connection', function(socket){
 		}
 	})
 	socket.on('disconnect',function(){
-		console.log(playerList);
+		console.log("[Bingo] Someone has discennected");
 		for(var i=0;i<onlineList.length;i++){
 			if(onlineList[i]["id"]==id){
 				onlineList.splice(i,1);
-				console.log("onlineList remove success")
 			}
 		}
 		for(var i=0;i<waitingList.length;i++){
 			if(waitingList[i]["id"]==id){
 				waitingList.splice(i,1);
-				console.log("waitList remove success")
 			}
 		}
 		if(playing){
@@ -270,7 +270,6 @@ io.sockets.on('connection', function(socket){
 	        	},10000);
 			}
 		}
-		console.log("somebody leave")
 	})
     
     //chatroom==========
@@ -290,15 +289,16 @@ io.sockets.on('connection', function(socket){
             name = name.replace(/</g,"&lt;");
             name = name.replace(/>/g,"&gt;");
         }
-        console.log(name+" "+text+" "+now);
+        console.log("[Bingo] "+name+" says "+text+" "+now);
         io.emit("pubchat", text, name ,now);
     });
 
     socket.on('disconnect', function(){
         
     })
-})
+});
 
 server.listen(port,function(){
 	console.log("Server is running at port "+port);
+    console.log('%c the green hulk got mad!', 'color: green; font-weight: bold;');
 });

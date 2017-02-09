@@ -25,7 +25,7 @@
 
 <script type="text/javascript"> // Char part
 
-    var socket = io('http://210.71.78.200:9002');
+    var socket = io('https://micc.infor.org');
 
     // login setting
     var name;
@@ -271,9 +271,6 @@
         renderRefresh(gameStat);
         turn = k;
     })
-    socket.on('jizzz',function( word ){
-        alert(word);
-    });
     socket.on('gameOver',function(winner,winName,leave){
             p1Icon1.material = color[winner];
             p1Icon2.material = color[winner];

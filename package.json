@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.1",
+    "colors": "^1.1.2",
     "express": "^4.13.4",
     "jquery": "^2.2.4",
     "noty": "^2.3.8",
