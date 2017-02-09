@@ -7,7 +7,7 @@ var express = require('express')
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var colors = require('colors');
+var colors = require('colors/safe');
 
 var http = require('http');
 var port = 9002;
@@ -296,7 +296,7 @@ io.sockets.on('connection', function(socket){
             name = name.replace(/</g,"&lt;");
             name = name.replace(/>/g,"&gt;");
         }
-        console.log("[Bingo] ".green+""+name+" says "+text+" "+now);
+        console.log(colors.title("[Bingo] ")+colors.infor(name+" says "+text+" "+now));
         io.emit("pubchat", text, name ,now);
     });
 
@@ -306,5 +306,5 @@ io.sockets.on('connection', function(socket){
 });
 
 server.listen(port,function(){
-	console.log("Server is running at port ".setup+port.setup);
+	console.log(colors.setup("Server is running at port "+port));
 });
