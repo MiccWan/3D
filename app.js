@@ -306,5 +306,5 @@ io.sockets.on('connection', function(socket){
 });
 
 server.listen(port,function(){
-	console.log(colors.setup("Server is running at port",port));
+	console.log(colors.setup("Server is running at port "+port));
 });
