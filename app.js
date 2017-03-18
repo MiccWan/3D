@@ -63,6 +63,15 @@ app.get('/SDVX',function(req,res){
 })
 
 
+app.use('/', express.static(__dirname+'/test'));
+app.get('/test',function(req,res){
+	console.log("[System] Get request to '/test'")
+  res.sendFile(__dirname+'/test/index.html',function(){
+    res.end();
+  })
+})
+
+
 setInterval(function(){
 	var month = new Date().getMonth()+1;
 	now = new Date().getFullYear().toString()+"-"+month.toString()+"-"+new Date().getDate().toString()+" ";
